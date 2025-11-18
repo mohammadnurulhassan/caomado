@@ -191,8 +191,9 @@ SELECT
     WHEN duration_seconds IS NULL OR duration_seconds < 0 THEN 0
     ELSE duration_seconds
   END AS duration_seconds_clean
-FROM `eidra-df-case.df2025.web_sessions`;```
+FROM `eidra-df-case.df2025.web_sessions`;
 
+::contentReference[oaicite:0]{index=0}
 
 
 
