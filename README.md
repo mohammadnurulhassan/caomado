@@ -63,7 +63,7 @@ All tables are in the following dataset:
 | `df2025.regions` | Regions mapping table. |
 
 ### 2.2 Example Summary Query
-
+```sql
 SELECT 'products' AS table_name, COUNT() AS row_count FROM eidra-df-case.df2025.products
 UNION ALL
 SELECT 'stores', COUNT() FROM eidra-df-case.df2025.stores
@@ -75,7 +75,7 @@ UNION ALL
 SELECT 'web_sessions', COUNT() FROM eidra-df-case.df2025.web_sessions
 UNION ALL
 SELECT 'regions', COUNT() FROM eidra-df-case.df2025.regions;
-
+```
 
 ---
 
@@ -233,14 +233,12 @@ FROM `eidra-df-case.df2025.web_sessions`;
   - Correlation between online sessions and in-store transactions.
 
 
-
-
 ---
 
 ## 6. Example Analytical Value
 
 ### 6.1 Sales by Region and Month
-
+```sql
 SELECT
   r.region_name,
   d.year,
@@ -259,12 +257,13 @@ ORDER BY
   d.year,
   d.month,
   total_sales_sek DESC;
+```
 
 
 
 
 ### 6.2 Sessions vs. Transactions by Region
-
+```sql
 WITH tx AS (
   SELECT
     region_code,
@@ -286,9 +285,7 @@ SELECT
 FROM tx
 JOIN sess USING (region_code)
 JOIN `...dim_region` AS r USING (region_code);
-
-
-
+```
 
 
 This comparison highlights regions where marketing yields high engagement but limited conversion — valuable insight for market optimization.
