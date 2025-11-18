@@ -192,11 +192,7 @@ SELECT
     ELSE duration_seconds
   END AS duration_seconds_clean
 FROM `eidra-df-case.df2025.web_sessions`;
-
-::contentReference[oaicite:0]{index=0}
-
-
-
+```
 
 ---
 
