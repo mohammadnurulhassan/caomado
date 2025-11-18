@@ -63,7 +63,7 @@ All tables are in the following dataset:
 | `df2025.regions` | Regions mapping table. |
 
 ### 2.2 Example Summary Query
-´´´sql
+
 SELECT 'products' AS table_name, COUNT() AS row_count FROM eidra-df-case.df2025.products
 UNION ALL
 SELECT 'stores', COUNT() FROM eidra-df-case.df2025.stores
@@ -74,7 +74,7 @@ SELECT 'transactions', COUNT() FROM eidra-df-case.df2025.transactions
 UNION ALL
 SELECT 'web_sessions', COUNT() FROM eidra-df-case.df2025.web_sessions
 UNION ALL
-SELECT 'regions', COUNT() FROM eidra-df-case.df2025.regions;´´´
+SELECT 'regions', COUNT() FROM eidra-df-case.df2025.regions;
 
 
 ---
@@ -180,7 +180,7 @@ Online sessions connect customers (when identifiable) and regions, linking digit
 - Inconsistent durations.
 
 **Mitigation (SELECT example):**
-
+```sql
 SELECT
   session_id,
   COALESCE(user_id, 'unknown_user') AS user_id_clean,
