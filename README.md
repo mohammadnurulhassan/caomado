@@ -1,5 +1,6 @@
 # caomado
 
+
 # NordicMart Sweden Expansion – Data Engineering Case
 
 **Candidate:** Mohammad Nurul Hassan  
@@ -180,14 +181,18 @@ Online sessions connect customers (when identifiable) and regions, linking digit
 
 **Mitigation (SELECT example):**
 
-´´´SELECT
-session_id,
-COALESCE(user_id, 'unknown_user') AS user_id_clean,
-COALESCE(page, 'unknown_page') AS page_clean,
-timestamp_utc,
-COALESCE(region_code, 'Unknown') AS region_code_clean,
-CASE WHEN duration_seconds IS NULL OR duration_seconds < 0 THEN 0 ELSE duration_seconds END AS duration_seconds_clean
-FROM eidra-df-case.df2025.web_sessions;´´´
+SELECT
+  session_id,
+  COALESCE(user_id, 'unknown_user') AS user_id_clean,
+  COALESCE(page, 'unknown_page') AS page_clean,
+  timestamp_utc,
+  COALESCE(region_code, 'Unknown') AS region_code_clean,
+  CASE
+    WHEN duration_seconds IS NULL OR duration_seconds < 0 THEN 0
+    ELSE duration_seconds
+  END AS duration_seconds_clean
+FROM `eidra-df-case.df2025.web_sessions`;
+
 
 
 
@@ -237,40 +242,54 @@ FROM eidra-df-case.df2025.web_sessions;´´´
 
 ## 6. Example Analytical Value
 
-### 6.1 Sales by Region and Month´
+### 6.1 Sales by Region and Month
 
-´´´SELECT
-r.region_name,
-d.year,
-d.month,
-SUM(f.gross_amount_sek) AS total_sales_sek
-FROM ...fact_transactions AS f
-JOIN ...dim_region AS r ON f.region_code = r.region_code
-JOIN ...dim_date AS d ON f.date_key = d.date_key
-GROUP BY r.region_name, d.year, d.month
-ORDER BY d.year, d.month, total_sales_sek DESC;´´´
+SELECT
+  r.region_name,
+  d.year,
+  d.month,
+  SUM(f.gross_amount_sek) AS total_sales_sek
+FROM `...fact_transactions` AS f
+JOIN `...dim_region` AS r
+  ON f.region_code = r.region_code
+JOIN `...dim_date` AS d
+  ON f.date_key = d.date_key
+GROUP BY
+  r.region_name,
+  d.year,
+  d.month
+ORDER BY
+  d.year,
+  d.month,
+  total_sales_sek DESC;
+
 
 
 
 ### 6.2 Sessions vs. Transactions by Region
 
-WITH  AS (
-SELECT region_code, COUNT() AS transactions_count
-FROM ...fact_transactions
-GROUP BY region_code
+WITH tx AS (
+  SELECT
+    region_code,
+    COUNT(*) AS transactions_count
+  FROM `...fact_transactions`
+  GROUP BY region_code
 ),
 sess AS (
-SELECT region_code, COUNT() AS sessions_count
-FROM ...fact_web_sessions
-GROUP BY region_code
+  SELECT
+    region_code,
+    COUNT(*) AS sessions_count
+  FROM `...fact_web_sessions`
+  GROUP BY region_code
 )
 SELECT
-r.region_name,
-tx.transactions_count,
-sess.sessions_count
+  r.region_name,
+  tx.transactions_count,
+  sess.sessions_count
 FROM tx
 JOIN sess USING (region_code)
-JOIN ...dim_region AS r USING (region_code);
+JOIN `...dim_region` AS r USING (region_code);
+
 
 
 
